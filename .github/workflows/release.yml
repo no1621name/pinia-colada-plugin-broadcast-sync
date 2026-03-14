@@ -29,5 +29,6 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - run: pnpm install --frozen-lockfile
-      - run: npm install -g npm@latest
       - run: pnpm publish -r --access public --no-git-checks
+        env:
+            NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
