@@ -1,16 +1,16 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import { PiniaColada } from '@pinia/colada'
-import App from './App.vue'
-import './style.css'
+import { createPinia } from 'pinia'
 import { PiniaColadaPluginBroadcastSync } from 'pinia-colada-plugin-broadcast-sync'
+import { createApp } from 'vue'
+import App from './app.vue'
+import './style.css'
 
 const app = createApp(App)
 const pinia = createPinia()
 
 app.use(pinia)
 app.use(PiniaColada, {
-    plugins: [PiniaColadaPluginBroadcastSync]
+  plugins: [PiniaColadaPluginBroadcastSync()],
 })
 
 app.mount('#app')
