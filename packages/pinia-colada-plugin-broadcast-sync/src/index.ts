@@ -1,14 +1,52 @@
-import { useMutationCache, type PiniaColadaPlugin, type UseMutationEntry } from '@pinia/colada'
+import type { DataState, EntryKey, PiniaColadaPlugin } from '@pinia/colada'
+import { Broadcaster } from './broadcaster'
 
-export function PiniaColadaPluginBroadcastSync(): PiniaColadaPlugin {
-  return ({queryCache, pinia}) => {
-    queryCache.$onAction((options) => {
-        console.log(options)
+export interface PiniaColadaPluginBroadcastSyncOptions {
+  /**
+   * The name of the broadcast channel to use.
+   *
+   * @default 'pinia-colada-plugin-broadcast-sync'
+   */
+  broadcastChannelName?: string
+}
+
+const OPTIONS_DEFAULTS = {
+  broadcastChannelName: 'pinia-colada-plugin-broadcast-sync',
+} satisfies Required<PiniaColadaPluginBroadcastSyncOptions>
+
+interface BroadcastSyncPayload {
+  state: DataState<unknown, unknown, unknown>
+  key: EntryKey
+}
+
+export function PiniaColadaPluginBroadcastSync(options = OPTIONS_DEFAULTS): PiniaColadaPlugin {
+  const broadcaster = new Broadcaster(options.broadcastChannelName)
+
+  let transaction = false
+  const makeTransaction = (cb: () => void) => {
+    transaction = true
+    cb()
+    transaction = false
+  }
+
+  return ({ queryCache }) => {
+    broadcaster.on<BroadcastSyncPayload>('updateState', (data) => {
+      makeTransaction(() => {
+        queryCache.setQueryData(data.key, data.state.data)
+      })
     })
-    
-    const mutationCache = useMutationCache(pinia)
-    mutationCache.$onAction((options) => {
-        console.log('mutation', options)
+
+    queryCache.$onAction(({ name, args, after }) => {
+      if (transaction) {
+        return
+      }
+
+      after(() => {
+        if (name === 'setEntryState') {
+          const [entry, state] = args
+          broadcaster.send<BroadcastSyncPayload>('updateState', { state, key: entry.key })
+        }
+      })
     })
   }
 }
