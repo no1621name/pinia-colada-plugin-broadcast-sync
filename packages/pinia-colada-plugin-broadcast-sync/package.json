@@ -1,7 +1,17 @@
 {
   "name": "pinia-colada-plugin-broadcast-sync",
+  "type": "module",
   "version": "0.0.1",
-  "description": "",
+  "packageManager": "pnpm@10.29.1",
+  "description": "A Pinia Colada plugin that syncs your state across tabs using Broadcast Channel API",
+  "author": "no1621name",
+  "license": "MIT",
+  "homepage": "https://github.com/no1621name/pinia-colada-broadcast-sync",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/no1621name/pinia-colada-broadcast-sync"
+  },
+  "bugs": "https://github.com/no1621name/pinia-colada-broadcast-sync/issues",
   "keywords": [
     "pinia-colada-plugin"
   ],
@@ -21,8 +31,7 @@
   },
   "scripts": {
     "dev": "tsdown --watch",
-    "build": "tsdown",
-    "prepack": "pnpm run build"
+    "build": "tsdown"
   },
   "peerDependencies": {
     "vue": "^3.5.27"
@@ -35,8 +44,5 @@
     "tsdown": "^0.20.3",
     "typescript": "^5.9.3",
     "vue": "^3.5.27"
-  },
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.29.1"
+  }
 }
