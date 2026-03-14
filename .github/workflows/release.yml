@@ -29,6 +29,9 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm publish -r --access public --no-git-checks
+      - run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          echo "always-auth=false" >> ~/.npmrc
+          pnpm publish -r --access public --no-git-checks
         env:
-            NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
