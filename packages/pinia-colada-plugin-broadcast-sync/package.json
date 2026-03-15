@@ -1,7 +1,7 @@
 {
   "name": "pinia-colada-plugin-broadcast-sync",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "packageManager": "pnpm@10.29.1",
   "description": "A Pinia Colada plugin that syncs your state across tabs using Broadcast Channel API",
   "author": "no1621name",
